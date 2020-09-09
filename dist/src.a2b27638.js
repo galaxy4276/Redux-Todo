@@ -5789,13 +5789,95 @@ var global = arguments[3];
 
 })));
 
+},{}],"src/modules/DOM.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SPAN_TIME = exports.P_AP = exports.P_DAY = exports.P_YEAR = void 0;
+var P_YEAR = document.querySelector('.date-year');
+exports.P_YEAR = P_YEAR;
+var P_DAY = document.querySelector('.date-day');
+exports.P_DAY = P_DAY;
+var P_AP = document.querySelector('.ap');
+exports.P_AP = P_AP;
+var SPAN_TIME = document.querySelector('.date-time');
+exports.SPAN_TIME = SPAN_TIME;
 },{}],"src/modules/Date.js":[function(require,module,exports) {
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getTime = exports.getAp = exports.getYear = exports.getDay = void 0;
+
 var _moment = _interopRequireDefault(require("moment"));
 
+var _DOM = require("./DOM");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"moment":"node_modules/moment/moment.js"}],"node_modules/parcel/src/builtins/bundle-url.js":[function(require,module,exports) {
+
+var getDay = function getDay() {
+  var day = (0, _moment.default)().format('dddd');
+  return transferDay(day);
+};
+
+exports.getDay = getDay;
+
+var transferDay = function transferDay(day) {
+  // 영어 요일을 한글요일로 변경해주는 노가다 함수
+  switch (day) {
+    case 'Monday':
+      return '월요일';
+
+    case 'Tuesday':
+      return '화요일';
+
+    case 'Wednesday':
+      return '수요일';
+
+    case 'Thursday':
+      return '목요일';
+
+    case 'Friday':
+      return '금요일';
+
+    case 'Saturday':
+      return '토요일';
+
+    case 'Sunday':
+      return '일요일';
+
+    default:
+      return '알 수 없음';
+  }
+
+  ;
+};
+
+var getYear = function getYear() {
+  var year = (0, _moment.default)().format('YYYY');
+  return year;
+};
+
+exports.getYear = getYear;
+
+var getAp = function getAp() {
+  var ap = (0, _moment.default)().format('LT').slice(-2);
+  console.log(ap);
+  return ap;
+};
+
+exports.getAp = getAp;
+
+var getTime = function getTime() {
+  var time = (0, _moment.default)().format('LTS').slice(0, 7);
+  return time;
+};
+
+exports.getTime = getTime;
+},{"moment":"node_modules/moment/moment.js","./DOM":"src/modules/DOM.js"}],"node_modules/parcel/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -5867,15 +5949,2000 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel/src/builtins/css-loader.js"}],"src/index.js":[function(require,module,exports) {
+},{"_css_loader":"node_modules/parcel/src/builtins/css-loader.js"}],"node_modules/symbol-observable/es/ponyfill.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = symbolObservablePonyfill;
+
+function symbolObservablePonyfill(root) {
+  var result;
+  var Symbol = root.Symbol;
+
+  if (typeof Symbol === 'function') {
+    if (Symbol.observable) {
+      result = Symbol.observable;
+    } else {
+      result = Symbol('observable');
+      Symbol.observable = result;
+    }
+  } else {
+    result = '@@observable';
+  }
+
+  return result;
+}
+
+;
+},{}],"node_modules/symbol-observable/es/index.js":[function(require,module,exports) {
+var global = arguments[3];
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _ponyfill = _interopRequireDefault(require("./ponyfill.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* global window */
+var root;
+
+if (typeof self !== 'undefined') {
+  root = self;
+} else if (typeof window !== 'undefined') {
+  root = window;
+} else if (typeof global !== 'undefined') {
+  root = global;
+} else if (typeof module !== 'undefined') {
+  root = module;
+} else {
+  root = Function('return this')();
+}
+
+var result = (0, _ponyfill.default)(root);
+var _default = result;
+exports.default = _default;
+},{"./ponyfill.js":"node_modules/symbol-observable/es/ponyfill.js"}],"node_modules/redux/es/redux.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.applyMiddleware = applyMiddleware;
+exports.bindActionCreators = bindActionCreators;
+exports.combineReducers = combineReducers;
+exports.compose = compose;
+exports.createStore = createStore;
+exports.__DO_NOT_USE__ActionTypes = void 0;
+
+var _symbolObservable = _interopRequireDefault(require("symbol-observable"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * These are private action types reserved by Redux.
+ * For any unknown actions, you must return the current state.
+ * If the current state is undefined, you must return the initial state.
+ * Do not reference these action types directly in your code.
+ */
+var randomString = function randomString() {
+  return Math.random().toString(36).substring(7).split('').join('.');
+};
+
+var ActionTypes = {
+  INIT: "@@redux/INIT" + randomString(),
+  REPLACE: "@@redux/REPLACE" + randomString(),
+  PROBE_UNKNOWN_ACTION: function PROBE_UNKNOWN_ACTION() {
+    return "@@redux/PROBE_UNKNOWN_ACTION" + randomString();
+  }
+};
+/**
+ * @param {any} obj The object to inspect.
+ * @returns {boolean} True if the argument appears to be a plain object.
+ */
+
+exports.__DO_NOT_USE__ActionTypes = ActionTypes;
+
+function isPlainObject(obj) {
+  if (typeof obj !== 'object' || obj === null) return false;
+  var proto = obj;
+
+  while (Object.getPrototypeOf(proto) !== null) {
+    proto = Object.getPrototypeOf(proto);
+  }
+
+  return Object.getPrototypeOf(obj) === proto;
+}
+/**
+ * Creates a Redux store that holds the state tree.
+ * The only way to change the data in the store is to call `dispatch()` on it.
+ *
+ * There should only be a single store in your app. To specify how different
+ * parts of the state tree respond to actions, you may combine several reducers
+ * into a single reducer function by using `combineReducers`.
+ *
+ * @param {Function} reducer A function that returns the next state tree, given
+ * the current state tree and the action to handle.
+ *
+ * @param {any} [preloadedState] The initial state. You may optionally specify it
+ * to hydrate the state from the server in universal apps, or to restore a
+ * previously serialized user session.
+ * If you use `combineReducers` to produce the root reducer function, this must be
+ * an object with the same shape as `combineReducers` keys.
+ *
+ * @param {Function} [enhancer] The store enhancer. You may optionally specify it
+ * to enhance the store with third-party capabilities such as middleware,
+ * time travel, persistence, etc. The only store enhancer that ships with Redux
+ * is `applyMiddleware()`.
+ *
+ * @returns {Store} A Redux store that lets you read the state, dispatch actions
+ * and subscribe to changes.
+ */
+
+
+function createStore(reducer, preloadedState, enhancer) {
+  var _ref2;
+
+  if (typeof preloadedState === 'function' && typeof enhancer === 'function' || typeof enhancer === 'function' && typeof arguments[3] === 'function') {
+    throw new Error('It looks like you are passing several store enhancers to ' + 'createStore(). This is not supported. Instead, compose them ' + 'together to a single function.');
+  }
+
+  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
+    enhancer = preloadedState;
+    preloadedState = undefined;
+  }
+
+  if (typeof enhancer !== 'undefined') {
+    if (typeof enhancer !== 'function') {
+      throw new Error('Expected the enhancer to be a function.');
+    }
+
+    return enhancer(createStore)(reducer, preloadedState);
+  }
+
+  if (typeof reducer !== 'function') {
+    throw new Error('Expected the reducer to be a function.');
+  }
+
+  var currentReducer = reducer;
+  var currentState = preloadedState;
+  var currentListeners = [];
+  var nextListeners = currentListeners;
+  var isDispatching = false;
+  /**
+   * This makes a shallow copy of currentListeners so we can use
+   * nextListeners as a temporary list while dispatching.
+   *
+   * This prevents any bugs around consumers calling
+   * subscribe/unsubscribe in the middle of a dispatch.
+   */
+
+  function ensureCanMutateNextListeners() {
+    if (nextListeners === currentListeners) {
+      nextListeners = currentListeners.slice();
+    }
+  }
+  /**
+   * Reads the state tree managed by the store.
+   *
+   * @returns {any} The current state tree of your application.
+   */
+
+
+  function getState() {
+    if (isDispatching) {
+      throw new Error('You may not call store.getState() while the reducer is executing. ' + 'The reducer has already received the state as an argument. ' + 'Pass it down from the top reducer instead of reading it from the store.');
+    }
+
+    return currentState;
+  }
+  /**
+   * Adds a change listener. It will be called any time an action is dispatched,
+   * and some part of the state tree may potentially have changed. You may then
+   * call `getState()` to read the current state tree inside the callback.
+   *
+   * You may call `dispatch()` from a change listener, with the following
+   * caveats:
+   *
+   * 1. The subscriptions are snapshotted just before every `dispatch()` call.
+   * If you subscribe or unsubscribe while the listeners are being invoked, this
+   * will not have any effect on the `dispatch()` that is currently in progress.
+   * However, the next `dispatch()` call, whether nested or not, will use a more
+   * recent snapshot of the subscription list.
+   *
+   * 2. The listener should not expect to see all state changes, as the state
+   * might have been updated multiple times during a nested `dispatch()` before
+   * the listener is called. It is, however, guaranteed that all subscribers
+   * registered before the `dispatch()` started will be called with the latest
+   * state by the time it exits.
+   *
+   * @param {Function} listener A callback to be invoked on every dispatch.
+   * @returns {Function} A function to remove this change listener.
+   */
+
+
+  function subscribe(listener) {
+    if (typeof listener !== 'function') {
+      throw new Error('Expected the listener to be a function.');
+    }
+
+    if (isDispatching) {
+      throw new Error('You may not call store.subscribe() while the reducer is executing. ' + 'If you would like to be notified after the store has been updated, subscribe from a ' + 'component and invoke store.getState() in the callback to access the latest state. ' + 'See https://redux.js.org/api-reference/store#subscribelistener for more details.');
+    }
+
+    var isSubscribed = true;
+    ensureCanMutateNextListeners();
+    nextListeners.push(listener);
+    return function unsubscribe() {
+      if (!isSubscribed) {
+        return;
+      }
+
+      if (isDispatching) {
+        throw new Error('You may not unsubscribe from a store listener while the reducer is executing. ' + 'See https://redux.js.org/api-reference/store#subscribelistener for more details.');
+      }
+
+      isSubscribed = false;
+      ensureCanMutateNextListeners();
+      var index = nextListeners.indexOf(listener);
+      nextListeners.splice(index, 1);
+      currentListeners = null;
+    };
+  }
+  /**
+   * Dispatches an action. It is the only way to trigger a state change.
+   *
+   * The `reducer` function, used to create the store, will be called with the
+   * current state tree and the given `action`. Its return value will
+   * be considered the **next** state of the tree, and the change listeners
+   * will be notified.
+   *
+   * The base implementation only supports plain object actions. If you want to
+   * dispatch a Promise, an Observable, a thunk, or something else, you need to
+   * wrap your store creating function into the corresponding middleware. For
+   * example, see the documentation for the `redux-thunk` package. Even the
+   * middleware will eventually dispatch plain object actions using this method.
+   *
+   * @param {Object} action A plain object representing “what changed”. It is
+   * a good idea to keep actions serializable so you can record and replay user
+   * sessions, or use the time travelling `redux-devtools`. An action must have
+   * a `type` property which may not be `undefined`. It is a good idea to use
+   * string constants for action types.
+   *
+   * @returns {Object} For convenience, the same action object you dispatched.
+   *
+   * Note that, if you use a custom middleware, it may wrap `dispatch()` to
+   * return something else (for example, a Promise you can await).
+   */
+
+
+  function dispatch(action) {
+    if (!isPlainObject(action)) {
+      throw new Error('Actions must be plain objects. ' + 'Use custom middleware for async actions.');
+    }
+
+    if (typeof action.type === 'undefined') {
+      throw new Error('Actions may not have an undefined "type" property. ' + 'Have you misspelled a constant?');
+    }
+
+    if (isDispatching) {
+      throw new Error('Reducers may not dispatch actions.');
+    }
+
+    try {
+      isDispatching = true;
+      currentState = currentReducer(currentState, action);
+    } finally {
+      isDispatching = false;
+    }
+
+    var listeners = currentListeners = nextListeners;
+
+    for (var i = 0; i < listeners.length; i++) {
+      var listener = listeners[i];
+      listener();
+    }
+
+    return action;
+  }
+  /**
+   * Replaces the reducer currently used by the store to calculate the state.
+   *
+   * You might need this if your app implements code splitting and you want to
+   * load some of the reducers dynamically. You might also need this if you
+   * implement a hot reloading mechanism for Redux.
+   *
+   * @param {Function} nextReducer The reducer for the store to use instead.
+   * @returns {void}
+   */
+
+
+  function replaceReducer(nextReducer) {
+    if (typeof nextReducer !== 'function') {
+      throw new Error('Expected the nextReducer to be a function.');
+    }
+
+    currentReducer = nextReducer; // This action has a similiar effect to ActionTypes.INIT.
+    // Any reducers that existed in both the new and old rootReducer
+    // will receive the previous state. This effectively populates
+    // the new state tree with any relevant data from the old one.
+
+    dispatch({
+      type: ActionTypes.REPLACE
+    });
+  }
+  /**
+   * Interoperability point for observable/reactive libraries.
+   * @returns {observable} A minimal observable of state changes.
+   * For more information, see the observable proposal:
+   * https://github.com/tc39/proposal-observable
+   */
+
+
+  function observable() {
+    var _ref;
+
+    var outerSubscribe = subscribe;
+    return _ref = {
+      /**
+       * The minimal observable subscription method.
+       * @param {Object} observer Any object that can be used as an observer.
+       * The observer object should have a `next` method.
+       * @returns {subscription} An object with an `unsubscribe` method that can
+       * be used to unsubscribe the observable from the store, and prevent further
+       * emission of values from the observable.
+       */
+      subscribe: function subscribe(observer) {
+        if (typeof observer !== 'object' || observer === null) {
+          throw new TypeError('Expected the observer to be an object.');
+        }
+
+        function observeState() {
+          if (observer.next) {
+            observer.next(getState());
+          }
+        }
+
+        observeState();
+        var unsubscribe = outerSubscribe(observeState);
+        return {
+          unsubscribe: unsubscribe
+        };
+      }
+    }, _ref[_symbolObservable.default] = function () {
+      return this;
+    }, _ref;
+  } // When a store is created, an "INIT" action is dispatched so that every
+  // reducer returns their initial state. This effectively populates
+  // the initial state tree.
+
+
+  dispatch({
+    type: ActionTypes.INIT
+  });
+  return _ref2 = {
+    dispatch: dispatch,
+    subscribe: subscribe,
+    getState: getState,
+    replaceReducer: replaceReducer
+  }, _ref2[_symbolObservable.default] = observable, _ref2;
+}
+/**
+ * Prints a warning in the console if it exists.
+ *
+ * @param {String} message The warning message.
+ * @returns {void}
+ */
+
+
+function warning(message) {
+  /* eslint-disable no-console */
+  if (typeof console !== 'undefined' && typeof console.error === 'function') {
+    console.error(message);
+  }
+  /* eslint-enable no-console */
+
+
+  try {
+    // This error was thrown as a convenience so that if you enable
+    // "break on all exceptions" in your console,
+    // it would pause the execution at this line.
+    throw new Error(message);
+  } catch (e) {} // eslint-disable-line no-empty
+
+}
+
+function getUndefinedStateErrorMessage(key, action) {
+  var actionType = action && action.type;
+  var actionDescription = actionType && "action \"" + String(actionType) + "\"" || 'an action';
+  return "Given " + actionDescription + ", reducer \"" + key + "\" returned undefined. " + "To ignore an action, you must explicitly return the previous state. " + "If you want this reducer to hold no value, you can return null instead of undefined.";
+}
+
+function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, unexpectedKeyCache) {
+  var reducerKeys = Object.keys(reducers);
+  var argumentName = action && action.type === ActionTypes.INIT ? 'preloadedState argument passed to createStore' : 'previous state received by the reducer';
+
+  if (reducerKeys.length === 0) {
+    return 'Store does not have a valid reducer. Make sure the argument passed ' + 'to combineReducers is an object whose values are reducers.';
+  }
+
+  if (!isPlainObject(inputState)) {
+    return "The " + argumentName + " has unexpected type of \"" + {}.toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] + "\". Expected argument to be an object with the following " + ("keys: \"" + reducerKeys.join('", "') + "\"");
+  }
+
+  var unexpectedKeys = Object.keys(inputState).filter(function (key) {
+    return !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key];
+  });
+  unexpectedKeys.forEach(function (key) {
+    unexpectedKeyCache[key] = true;
+  });
+  if (action && action.type === ActionTypes.REPLACE) return;
+
+  if (unexpectedKeys.length > 0) {
+    return "Unexpected " + (unexpectedKeys.length > 1 ? 'keys' : 'key') + " " + ("\"" + unexpectedKeys.join('", "') + "\" found in " + argumentName + ". ") + "Expected to find one of the known reducer keys instead: " + ("\"" + reducerKeys.join('", "') + "\". Unexpected keys will be ignored.");
+  }
+}
+
+function assertReducerShape(reducers) {
+  Object.keys(reducers).forEach(function (key) {
+    var reducer = reducers[key];
+    var initialState = reducer(undefined, {
+      type: ActionTypes.INIT
+    });
+
+    if (typeof initialState === 'undefined') {
+      throw new Error("Reducer \"" + key + "\" returned undefined during initialization. " + "If the state passed to the reducer is undefined, you must " + "explicitly return the initial state. The initial state may " + "not be undefined. If you don't want to set a value for this reducer, " + "you can use null instead of undefined.");
+    }
+
+    if (typeof reducer(undefined, {
+      type: ActionTypes.PROBE_UNKNOWN_ACTION()
+    }) === 'undefined') {
+      throw new Error("Reducer \"" + key + "\" returned undefined when probed with a random type. " + ("Don't try to handle " + ActionTypes.INIT + " or other actions in \"redux/*\" ") + "namespace. They are considered private. Instead, you must return the " + "current state for any unknown actions, unless it is undefined, " + "in which case you must return the initial state, regardless of the " + "action type. The initial state may not be undefined, but can be null.");
+    }
+  });
+}
+/**
+ * Turns an object whose values are different reducer functions, into a single
+ * reducer function. It will call every child reducer, and gather their results
+ * into a single state object, whose keys correspond to the keys of the passed
+ * reducer functions.
+ *
+ * @param {Object} reducers An object whose values correspond to different
+ * reducer functions that need to be combined into one. One handy way to obtain
+ * it is to use ES6 `import * as reducers` syntax. The reducers may never return
+ * undefined for any action. Instead, they should return their initial state
+ * if the state passed to them was undefined, and the current state for any
+ * unrecognized action.
+ *
+ * @returns {Function} A reducer function that invokes every reducer inside the
+ * passed object, and builds a state object with the same shape.
+ */
+
+
+function combineReducers(reducers) {
+  var reducerKeys = Object.keys(reducers);
+  var finalReducers = {};
+
+  for (var i = 0; i < reducerKeys.length; i++) {
+    var key = reducerKeys[i];
+
+    if ("development" !== 'production') {
+      if (typeof reducers[key] === 'undefined') {
+        warning("No reducer provided for key \"" + key + "\"");
+      }
+    }
+
+    if (typeof reducers[key] === 'function') {
+      finalReducers[key] = reducers[key];
+    }
+  }
+
+  var finalReducerKeys = Object.keys(finalReducers); // This is used to make sure we don't warn about the same
+  // keys multiple times.
+
+  var unexpectedKeyCache;
+
+  if ("development" !== 'production') {
+    unexpectedKeyCache = {};
+  }
+
+  var shapeAssertionError;
+
+  try {
+    assertReducerShape(finalReducers);
+  } catch (e) {
+    shapeAssertionError = e;
+  }
+
+  return function combination(state, action) {
+    if (state === void 0) {
+      state = {};
+    }
+
+    if (shapeAssertionError) {
+      throw shapeAssertionError;
+    }
+
+    if ("development" !== 'production') {
+      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache);
+
+      if (warningMessage) {
+        warning(warningMessage);
+      }
+    }
+
+    var hasChanged = false;
+    var nextState = {};
+
+    for (var _i = 0; _i < finalReducerKeys.length; _i++) {
+      var _key = finalReducerKeys[_i];
+      var reducer = finalReducers[_key];
+      var previousStateForKey = state[_key];
+      var nextStateForKey = reducer(previousStateForKey, action);
+
+      if (typeof nextStateForKey === 'undefined') {
+        var errorMessage = getUndefinedStateErrorMessage(_key, action);
+        throw new Error(errorMessage);
+      }
+
+      nextState[_key] = nextStateForKey;
+      hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
+    }
+
+    hasChanged = hasChanged || finalReducerKeys.length !== Object.keys(state).length;
+    return hasChanged ? nextState : state;
+  };
+}
+
+function bindActionCreator(actionCreator, dispatch) {
+  return function () {
+    return dispatch(actionCreator.apply(this, arguments));
+  };
+}
+/**
+ * Turns an object whose values are action creators, into an object with the
+ * same keys, but with every function wrapped into a `dispatch` call so they
+ * may be invoked directly. This is just a convenience method, as you can call
+ * `store.dispatch(MyActionCreators.doSomething())` yourself just fine.
+ *
+ * For convenience, you can also pass an action creator as the first argument,
+ * and get a dispatch wrapped function in return.
+ *
+ * @param {Function|Object} actionCreators An object whose values are action
+ * creator functions. One handy way to obtain it is to use ES6 `import * as`
+ * syntax. You may also pass a single function.
+ *
+ * @param {Function} dispatch The `dispatch` function available on your Redux
+ * store.
+ *
+ * @returns {Function|Object} The object mimicking the original object, but with
+ * every action creator wrapped into the `dispatch` call. If you passed a
+ * function as `actionCreators`, the return value will also be a single
+ * function.
+ */
+
+
+function bindActionCreators(actionCreators, dispatch) {
+  if (typeof actionCreators === 'function') {
+    return bindActionCreator(actionCreators, dispatch);
+  }
+
+  if (typeof actionCreators !== 'object' || actionCreators === null) {
+    throw new Error("bindActionCreators expected an object or a function, instead received " + (actionCreators === null ? 'null' : typeof actionCreators) + ". " + "Did you write \"import ActionCreators from\" instead of \"import * as ActionCreators from\"?");
+  }
+
+  var boundActionCreators = {};
+
+  for (var key in actionCreators) {
+    var actionCreator = actionCreators[key];
+
+    if (typeof actionCreator === 'function') {
+      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch);
+    }
+  }
+
+  return boundActionCreators;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    keys.push.apply(keys, Object.getOwnPropertySymbols(object));
+  }
+
+  if (enumerableOnly) keys = keys.filter(function (sym) {
+    return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+  });
+  return keys;
+}
+
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(source, true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(source).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+/**
+ * Composes single-argument functions from right to left. The rightmost
+ * function can take multiple arguments as it provides the signature for
+ * the resulting composite function.
+ *
+ * @param {...Function} funcs The functions to compose.
+ * @returns {Function} A function obtained by composing the argument functions
+ * from right to left. For example, compose(f, g, h) is identical to doing
+ * (...args) => f(g(h(...args))).
+ */
+
+
+function compose() {
+  for (var _len = arguments.length, funcs = new Array(_len), _key = 0; _key < _len; _key++) {
+    funcs[_key] = arguments[_key];
+  }
+
+  if (funcs.length === 0) {
+    return function (arg) {
+      return arg;
+    };
+  }
+
+  if (funcs.length === 1) {
+    return funcs[0];
+  }
+
+  return funcs.reduce(function (a, b) {
+    return function () {
+      return a(b.apply(void 0, arguments));
+    };
+  });
+}
+/**
+ * Creates a store enhancer that applies middleware to the dispatch method
+ * of the Redux store. This is handy for a variety of tasks, such as expressing
+ * asynchronous actions in a concise manner, or logging every action payload.
+ *
+ * See `redux-thunk` package as an example of the Redux middleware.
+ *
+ * Because middleware is potentially asynchronous, this should be the first
+ * store enhancer in the composition chain.
+ *
+ * Note that each middleware will be given the `dispatch` and `getState` functions
+ * as named arguments.
+ *
+ * @param {...Function} middlewares The middleware chain to be applied.
+ * @returns {Function} A store enhancer applying the middleware.
+ */
+
+
+function applyMiddleware() {
+  for (var _len = arguments.length, middlewares = new Array(_len), _key = 0; _key < _len; _key++) {
+    middlewares[_key] = arguments[_key];
+  }
+
+  return function (createStore) {
+    return function () {
+      var store = createStore.apply(void 0, arguments);
+
+      var _dispatch = function dispatch() {
+        throw new Error('Dispatching while constructing your middleware is not allowed. ' + 'Other middleware would not be applied to this dispatch.');
+      };
+
+      var middlewareAPI = {
+        getState: store.getState,
+        dispatch: function dispatch() {
+          return _dispatch.apply(void 0, arguments);
+        }
+      };
+      var chain = middlewares.map(function (middleware) {
+        return middleware(middlewareAPI);
+      });
+      _dispatch = compose.apply(void 0, chain)(store.dispatch);
+      return _objectSpread2({}, store, {
+        dispatch: _dispatch
+      });
+    };
+  };
+}
+/*
+ * This is a dummy function to check if the function name has been altered by minification.
+ * If the function has been minified and NODE_ENV !== 'production', warn the user.
+ */
+
+
+function isCrushed() {}
+
+if ("development" !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
+  warning('You are currently using minified code outside of NODE_ENV === "production". ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or setting mode to production in webpack (https://webpack.js.org/concepts/mode/) ' + 'to ensure you have the correct code for your production build.');
+}
+},{"symbol-observable":"node_modules/symbol-observable/es/index.js"}],"node_modules/invariant/browser.js":[function(require,module,exports) {
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+'use strict';
+/**
+ * Use invariant() to assert state which your program assumes to be true.
+ *
+ * Provide sprintf-style format (only %s is supported) and arguments
+ * to provide information about what broke and what you were
+ * expecting.
+ *
+ * The invariant message will be stripped in production, but the invariant
+ * will remain to ensure logic does not differ in production.
+ */
+
+var invariant = function (condition, format, a, b, c, d, e, f) {
+  if ("development" !== 'production') {
+    if (format === undefined) {
+      throw new Error('invariant requires an error message argument');
+    }
+  }
+
+  if (!condition) {
+    var error;
+
+    if (format === undefined) {
+      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+    } else {
+      var args = [a, b, c, d, e, f];
+      var argIndex = 0;
+      error = new Error(format.replace(/%s/g, function () {
+        return args[argIndex++];
+      }));
+      error.name = 'Invariant Violation';
+    }
+
+    error.framesToPop = 1; // we don't care about invariant's own frame
+
+    throw error;
+  }
+};
+
+module.exports = invariant;
+},{}],"node_modules/redux-actions/es/utils/isFunction.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default(value) {
+  return typeof value === 'function';
+};
+
+exports.default = _default;
+},{}],"node_modules/redux-actions/es/utils/isSymbol.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default(value) {
+  return typeof value === 'symbol' || typeof value === 'object' && Object.prototype.toString.call(value) === '[object Symbol]';
+};
+
+exports.default = _default;
+},{}],"node_modules/redux-actions/es/utils/isEmpty.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default(value) {
+  return value.length === 0;
+};
+
+exports.default = _default;
+},{}],"node_modules/redux-actions/es/utils/toString.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default(value) {
+  return value.toString();
+};
+
+exports.default = _default;
+},{}],"node_modules/redux-actions/es/utils/isString.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default(value) {
+  return typeof value === 'string';
+};
+
+exports.default = _default;
+},{}],"node_modules/redux-actions/es/constants.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ACTION_TYPE_DELIMITER = exports.DEFAULT_NAMESPACE = void 0;
+var DEFAULT_NAMESPACE = '/';
+exports.DEFAULT_NAMESPACE = DEFAULT_NAMESPACE;
+var ACTION_TYPE_DELIMITER = '||';
+exports.ACTION_TYPE_DELIMITER = ACTION_TYPE_DELIMITER;
+},{}],"node_modules/redux-actions/es/combineActions.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = combineActions;
+
+var _invariant = _interopRequireDefault(require("invariant"));
+
+var _isFunction = _interopRequireDefault(require("./utils/isFunction"));
+
+var _isSymbol = _interopRequireDefault(require("./utils/isSymbol"));
+
+var _isEmpty = _interopRequireDefault(require("./utils/isEmpty"));
+
+var _toString = _interopRequireDefault(require("./utils/toString"));
+
+var _isString = _interopRequireDefault(require("./utils/isString"));
+
+var _constants = require("./constants");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function isValidActionType(type) {
+  return (0, _isString.default)(type) || (0, _isFunction.default)(type) || (0, _isSymbol.default)(type);
+}
+
+function isValidActionTypes(types) {
+  if ((0, _isEmpty.default)(types)) {
+    return false;
+  }
+
+  return types.every(isValidActionType);
+}
+
+function combineActions() {
+  for (var _len = arguments.length, actionsTypes = new Array(_len), _key = 0; _key < _len; _key++) {
+    actionsTypes[_key] = arguments[_key];
+  }
+
+  (0, _invariant.default)(isValidActionTypes(actionsTypes), 'Expected action types to be strings, symbols, or action creators');
+  var combinedActionType = actionsTypes.map(_toString.default).join(_constants.ACTION_TYPE_DELIMITER);
+  return {
+    toString: function toString() {
+      return combinedActionType;
+    }
+  };
+}
+},{"invariant":"node_modules/invariant/browser.js","./utils/isFunction":"node_modules/redux-actions/es/utils/isFunction.js","./utils/isSymbol":"node_modules/redux-actions/es/utils/isSymbol.js","./utils/isEmpty":"node_modules/redux-actions/es/utils/isEmpty.js","./utils/toString":"node_modules/redux-actions/es/utils/toString.js","./utils/isString":"node_modules/redux-actions/es/utils/isString.js","./constants":"node_modules/redux-actions/es/constants.js"}],"node_modules/redux-actions/es/utils/identity.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default(value) {
+  return value;
+};
+
+exports.default = _default;
+},{}],"node_modules/redux-actions/es/utils/isNull.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default(value) {
+  return value === null;
+};
+
+exports.default = _default;
+},{}],"node_modules/redux-actions/es/createAction.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createAction;
+
+var _invariant = _interopRequireDefault(require("invariant"));
+
+var _isFunction = _interopRequireDefault(require("./utils/isFunction"));
+
+var _identity = _interopRequireDefault(require("./utils/identity"));
+
+var _isNull = _interopRequireDefault(require("./utils/isNull"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function createAction(type, payloadCreator, metaCreator) {
+  if (payloadCreator === void 0) {
+    payloadCreator = _identity.default;
+  }
+
+  (0, _invariant.default)((0, _isFunction.default)(payloadCreator) || (0, _isNull.default)(payloadCreator), 'Expected payloadCreator to be a function, undefined or null');
+  var finalPayloadCreator = (0, _isNull.default)(payloadCreator) || payloadCreator === _identity.default ? _identity.default : function (head) {
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    return head instanceof Error ? head : payloadCreator.apply(void 0, [head].concat(args));
+  };
+  var hasMeta = (0, _isFunction.default)(metaCreator);
+  var typeString = type.toString();
+
+  var actionCreator = function actionCreator() {
+    var payload = finalPayloadCreator.apply(void 0, arguments);
+    var action = {
+      type: type
+    };
+
+    if (payload instanceof Error) {
+      action.error = true;
+    }
+
+    if (payload !== undefined) {
+      action.payload = payload;
+    }
+
+    if (hasMeta) {
+      action.meta = metaCreator.apply(void 0, arguments);
+    }
+
+    return action;
+  };
+
+  actionCreator.toString = function () {
+    return typeString;
+  };
+
+  return actionCreator;
+}
+},{"invariant":"node_modules/invariant/browser.js","./utils/isFunction":"node_modules/redux-actions/es/utils/isFunction.js","./utils/identity":"node_modules/redux-actions/es/utils/identity.js","./utils/isNull":"node_modules/redux-actions/es/utils/isNull.js"}],"node_modules/redux-actions/es/utils/isPlainObject.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default(value) {
+  if (typeof value !== 'object' || value === null) return false;
+  var proto = value;
+
+  while (Object.getPrototypeOf(proto) !== null) {
+    proto = Object.getPrototypeOf(proto);
+  }
+
+  return Object.getPrototypeOf(value) === proto;
+};
+
+exports.default = _default;
+},{}],"node_modules/redux-actions/es/utils/isArray.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default(value) {
+  return Array.isArray(value);
+};
+
+exports.default = _default;
+},{}],"node_modules/redux-actions/es/utils/isNil.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default(value) {
+  return value === null || value === undefined;
+};
+
+exports.default = _default;
+},{}],"node_modules/redux-actions/es/utils/getLastElement.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default(array) {
+  return array[array.length - 1];
+};
+
+exports.default = _default;
+},{}],"node_modules/to-no-case/index.js":[function(require,module,exports) {
+
+/**
+ * Export.
+ */
+
+module.exports = toNoCase
+
+/**
+ * Test whether a string is camel-case.
+ */
+
+var hasSpace = /\s/
+var hasSeparator = /(_|-|\.|:)/
+var hasCamel = /([a-z][A-Z]|[A-Z][a-z])/
+
+/**
+ * Remove any starting case from a `string`, like camel or snake, but keep
+ * spaces and punctuation that may be important otherwise.
+ *
+ * @param {String} string
+ * @return {String}
+ */
+
+function toNoCase(string) {
+  if (hasSpace.test(string)) return string.toLowerCase()
+  if (hasSeparator.test(string)) return (unseparate(string) || string).toLowerCase()
+  if (hasCamel.test(string)) return uncamelize(string).toLowerCase()
+  return string.toLowerCase()
+}
+
+/**
+ * Separator splitter.
+ */
+
+var separatorSplitter = /[\W_]+(.|$)/g
+
+/**
+ * Un-separate a `string`.
+ *
+ * @param {String} string
+ * @return {String}
+ */
+
+function unseparate(string) {
+  return string.replace(separatorSplitter, function (m, next) {
+    return next ? ' ' + next : ''
+  })
+}
+
+/**
+ * Camelcase splitter.
+ */
+
+var camelSplitter = /(.)([A-Z]+)/g
+
+/**
+ * Un-camelcase a `string`.
+ *
+ * @param {String} string
+ * @return {String}
+ */
+
+function uncamelize(string) {
+  return string.replace(camelSplitter, function (m, previous, uppers) {
+    return previous + ' ' + uppers.toLowerCase().split('').join(' ')
+  })
+}
+
+},{}],"node_modules/to-space-case/index.js":[function(require,module,exports) {
+
+var clean = require('to-no-case')
+
+/**
+ * Export.
+ */
+
+module.exports = toSpaceCase
+
+/**
+ * Convert a `string` to space case.
+ *
+ * @param {String} string
+ * @return {String}
+ */
+
+function toSpaceCase(string) {
+  return clean(string).replace(/[\W_]+(.|$)/g, function (matches, match) {
+    return match ? ' ' + match : ''
+  }).trim()
+}
+
+},{"to-no-case":"node_modules/to-no-case/index.js"}],"node_modules/to-camel-case/index.js":[function(require,module,exports) {
+
+var space = require('to-space-case')
+
+/**
+ * Export.
+ */
+
+module.exports = toCamelCase
+
+/**
+ * Convert a `string` to camel case.
+ *
+ * @param {String} string
+ * @return {String}
+ */
+
+function toCamelCase(string) {
+  return space(string).replace(/\s(\w)/g, function (matches, letter) {
+    return letter.toUpperCase()
+  })
+}
+
+},{"to-space-case":"node_modules/to-space-case/index.js"}],"node_modules/redux-actions/es/utils/camelCase.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _toCamelCase = _interopRequireDefault(require("to-camel-case"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var namespacer = '/';
+
+var _default = function _default(type) {
+  return type.indexOf(namespacer) === -1 ? (0, _toCamelCase.default)(type) : type.split(namespacer).map(_toCamelCase.default).join(namespacer);
+};
+
+exports.default = _default;
+},{"to-camel-case":"node_modules/to-camel-case/index.js"}],"node_modules/redux-actions/es/utils/arrayToObject.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default(array, callback) {
+  return array.reduce(function (partialObject, element) {
+    return callback(partialObject, element);
+  }, {});
+};
+
+exports.default = _default;
+},{}],"node_modules/redux-actions/es/utils/isMap.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default(value) {
+  return typeof Map !== 'undefined' && value instanceof Map;
+};
+
+exports.default = _default;
+},{}],"node_modules/redux-actions/es/utils/ownKeys.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = ownKeys;
+
+var _isMap = _interopRequireDefault(require("./isMap"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function ownKeys(object) {
+  if ((0, _isMap.default)(object)) {
+    // We are using loose transforms in babel. Here we are trying to convert an
+    // interable to an array. Loose mode expects everything to already be an
+    // array. The problem is that our eslint rules encourage us to prefer
+    // spread over Array.from.
+    //
+    // Instead of disabling loose mode we simply disable the warning.
+    // eslint-disable-next-line unicorn/prefer-spread
+    return Array.from(object.keys());
+  }
+
+  if (typeof Reflect !== 'undefined' && typeof Reflect.ownKeys === 'function') {
+    return Reflect.ownKeys(object);
+  }
+
+  var keys = Object.getOwnPropertyNames(object);
+
+  if (typeof Object.getOwnPropertySymbols === 'function') {
+    keys = keys.concat(Object.getOwnPropertySymbols(object));
+  }
+
+  return keys;
+}
+},{"./isMap":"node_modules/redux-actions/es/utils/isMap.js"}],"node_modules/redux-actions/es/utils/get.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = get;
+
+var _isMap = _interopRequireDefault(require("./isMap"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function get(key, x) {
+  return (0, _isMap.default)(x) ? x.get(key) : x[key];
+}
+},{"./isMap":"node_modules/redux-actions/es/utils/isMap.js"}],"node_modules/redux-actions/es/utils/flattenWhenNode.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _constants = require("../constants");
+
+var _ownKeys = _interopRequireDefault(require("./ownKeys"));
+
+var _get = _interopRequireDefault(require("./get"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = function _default(predicate) {
+  return function flatten(map, _temp, partialFlatMap, partialFlatActionType) {
+    var _ref = _temp === void 0 ? {} : _temp,
+        _ref$namespace = _ref.namespace,
+        namespace = _ref$namespace === void 0 ? _constants.DEFAULT_NAMESPACE : _ref$namespace,
+        prefix = _ref.prefix;
+
+    if (partialFlatMap === void 0) {
+      partialFlatMap = {};
+    }
+
+    if (partialFlatActionType === void 0) {
+      partialFlatActionType = '';
+    }
+
+    function connectNamespace(type) {
+      var _ref2;
+
+      if (!partialFlatActionType) return type;
+      var types = type.toString().split(_constants.ACTION_TYPE_DELIMITER);
+      var partials = partialFlatActionType.split(_constants.ACTION_TYPE_DELIMITER);
+      return (_ref2 = []).concat.apply(_ref2, partials.map(function (p) {
+        return types.map(function (t) {
+          return "" + p + namespace + t;
+        });
+      })).join(_constants.ACTION_TYPE_DELIMITER);
+    }
+
+    function connectPrefix(type) {
+      if (partialFlatActionType || !prefix || prefix && new RegExp("^" + prefix + namespace).test(type)) {
+        return type;
+      }
+
+      return "" + prefix + namespace + type;
+    }
+
+    (0, _ownKeys.default)(map).forEach(function (type) {
+      var nextNamespace = connectPrefix(connectNamespace(type));
+      var mapValue = (0, _get.default)(type, map);
+
+      if (predicate(mapValue)) {
+        flatten(mapValue, {
+          namespace: namespace,
+          prefix: prefix
+        }, partialFlatMap, nextNamespace);
+      } else {
+        partialFlatMap[nextNamespace] = mapValue;
+      }
+    });
+    return partialFlatMap;
+  };
+};
+
+exports.default = _default;
+},{"../constants":"node_modules/redux-actions/es/constants.js","./ownKeys":"node_modules/redux-actions/es/utils/ownKeys.js","./get":"node_modules/redux-actions/es/utils/get.js"}],"node_modules/redux-actions/es/utils/flattenActionMap.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _isPlainObject = _interopRequireDefault(require("./isPlainObject"));
+
+var _flattenWhenNode = _interopRequireDefault(require("./flattenWhenNode"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = (0, _flattenWhenNode.default)(_isPlainObject.default);
+
+exports.default = _default;
+},{"./isPlainObject":"node_modules/redux-actions/es/utils/isPlainObject.js","./flattenWhenNode":"node_modules/redux-actions/es/utils/flattenWhenNode.js"}],"node_modules/redux-actions/es/utils/unflattenActionCreators.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = unflattenActionCreators;
+
+var _constants = require("../constants");
+
+var _isEmpty = _interopRequireDefault(require("./isEmpty"));
+
+var _camelCase = _interopRequireDefault(require("./camelCase"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function unflattenActionCreators(flatActionCreators, _temp) {
+  var _ref = _temp === void 0 ? {} : _temp,
+      _ref$namespace = _ref.namespace,
+      namespace = _ref$namespace === void 0 ? _constants.DEFAULT_NAMESPACE : _ref$namespace,
+      prefix = _ref.prefix;
+
+  function unflatten(flatActionType, partialNestedActionCreators, partialFlatActionTypePath) {
+    var nextNamespace = (0, _camelCase.default)(partialFlatActionTypePath.shift());
+
+    if ((0, _isEmpty.default)(partialFlatActionTypePath)) {
+      partialNestedActionCreators[nextNamespace] = flatActionCreators[flatActionType];
+    } else {
+      if (!partialNestedActionCreators[nextNamespace]) {
+        partialNestedActionCreators[nextNamespace] = {};
+      }
+
+      unflatten(flatActionType, partialNestedActionCreators[nextNamespace], partialFlatActionTypePath);
+    }
+  }
+
+  var nestedActionCreators = {};
+  Object.getOwnPropertyNames(flatActionCreators).forEach(function (type) {
+    var unprefixedType = prefix ? type.replace("" + prefix + namespace, '') : type;
+    return unflatten(type, nestedActionCreators, unprefixedType.split(namespace));
+  });
+  return nestedActionCreators;
+}
+},{"../constants":"node_modules/redux-actions/es/constants.js","./isEmpty":"node_modules/redux-actions/es/utils/isEmpty.js","./camelCase":"node_modules/redux-actions/es/utils/camelCase.js"}],"node_modules/redux-actions/es/createActions.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createActions;
+
+var _invariant = _interopRequireDefault(require("invariant"));
+
+var _isPlainObject = _interopRequireDefault(require("./utils/isPlainObject"));
+
+var _isFunction = _interopRequireDefault(require("./utils/isFunction"));
+
+var _identity = _interopRequireDefault(require("./utils/identity"));
+
+var _isArray = _interopRequireDefault(require("./utils/isArray"));
+
+var _isString = _interopRequireDefault(require("./utils/isString"));
+
+var _isNil = _interopRequireDefault(require("./utils/isNil"));
+
+var _getLastElement = _interopRequireDefault(require("./utils/getLastElement"));
+
+var _camelCase = _interopRequireDefault(require("./utils/camelCase"));
+
+var _arrayToObject = _interopRequireDefault(require("./utils/arrayToObject"));
+
+var _flattenActionMap = _interopRequireDefault(require("./utils/flattenActionMap"));
+
+var _unflattenActionCreators = _interopRequireDefault(require("./utils/unflattenActionCreators"));
+
+var _createAction = _interopRequireDefault(require("./createAction"));
+
+var _constants = require("./constants");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function createActions(actionMap) {
+  for (var _len = arguments.length, identityActions = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    identityActions[_key - 1] = arguments[_key];
+  }
+
+  var options = (0, _isPlainObject.default)((0, _getLastElement.default)(identityActions)) ? identityActions.pop() : {};
+  (0, _invariant.default)(identityActions.every(_isString.default) && ((0, _isString.default)(actionMap) || (0, _isPlainObject.default)(actionMap)), 'Expected optional object followed by string action types');
+
+  if ((0, _isString.default)(actionMap)) {
+    return actionCreatorsFromIdentityActions([actionMap].concat(identityActions), options);
+  }
+
+  return _objectSpread({}, actionCreatorsFromActionMap(actionMap, options), actionCreatorsFromIdentityActions(identityActions, options));
+}
+
+function actionCreatorsFromActionMap(actionMap, options) {
+  var flatActionMap = (0, _flattenActionMap.default)(actionMap, options);
+  var flatActionCreators = actionMapToActionCreators(flatActionMap);
+  return (0, _unflattenActionCreators.default)(flatActionCreators, options);
+}
+
+function actionMapToActionCreators(actionMap, _temp) {
+  var _ref = _temp === void 0 ? {} : _temp,
+      prefix = _ref.prefix,
+      _ref$namespace = _ref.namespace,
+      namespace = _ref$namespace === void 0 ? _constants.DEFAULT_NAMESPACE : _ref$namespace;
+
+  function isValidActionMapValue(actionMapValue) {
+    if ((0, _isFunction.default)(actionMapValue) || (0, _isNil.default)(actionMapValue)) {
+      return true;
+    }
+
+    if ((0, _isArray.default)(actionMapValue)) {
+      var _actionMapValue$ = actionMapValue[0],
+          payload = _actionMapValue$ === void 0 ? _identity.default : _actionMapValue$,
+          meta = actionMapValue[1];
+      return (0, _isFunction.default)(payload) && (0, _isFunction.default)(meta);
+    }
+
+    return false;
+  }
+
+  return (0, _arrayToObject.default)(Object.keys(actionMap), function (partialActionCreators, type) {
+    var _objectSpread2;
+
+    var actionMapValue = actionMap[type];
+    (0, _invariant.default)(isValidActionMapValue(actionMapValue), 'Expected function, undefined, null, or array with payload and meta ' + ("functions for " + type));
+    var prefixedType = prefix ? "" + prefix + namespace + type : type;
+    var actionCreator = (0, _isArray.default)(actionMapValue) ? _createAction.default.apply(void 0, [prefixedType].concat(actionMapValue)) : (0, _createAction.default)(prefixedType, actionMapValue);
+    return _objectSpread({}, partialActionCreators, (_objectSpread2 = {}, _objectSpread2[type] = actionCreator, _objectSpread2));
+  });
+}
+
+function actionCreatorsFromIdentityActions(identityActions, options) {
+  var actionMap = (0, _arrayToObject.default)(identityActions, function (partialActionMap, type) {
+    var _objectSpread3;
+
+    return _objectSpread({}, partialActionMap, (_objectSpread3 = {}, _objectSpread3[type] = _identity.default, _objectSpread3));
+  });
+  var actionCreators = actionMapToActionCreators(actionMap, options);
+  return (0, _arrayToObject.default)(Object.keys(actionCreators), function (partialActionCreators, type) {
+    var _objectSpread4;
+
+    return _objectSpread({}, partialActionCreators, (_objectSpread4 = {}, _objectSpread4[(0, _camelCase.default)(type)] = actionCreators[type], _objectSpread4));
+  });
+}
+},{"invariant":"node_modules/invariant/browser.js","./utils/isPlainObject":"node_modules/redux-actions/es/utils/isPlainObject.js","./utils/isFunction":"node_modules/redux-actions/es/utils/isFunction.js","./utils/identity":"node_modules/redux-actions/es/utils/identity.js","./utils/isArray":"node_modules/redux-actions/es/utils/isArray.js","./utils/isString":"node_modules/redux-actions/es/utils/isString.js","./utils/isNil":"node_modules/redux-actions/es/utils/isNil.js","./utils/getLastElement":"node_modules/redux-actions/es/utils/getLastElement.js","./utils/camelCase":"node_modules/redux-actions/es/utils/camelCase.js","./utils/arrayToObject":"node_modules/redux-actions/es/utils/arrayToObject.js","./utils/flattenActionMap":"node_modules/redux-actions/es/utils/flattenActionMap.js","./utils/unflattenActionCreators":"node_modules/redux-actions/es/utils/unflattenActionCreators.js","./createAction":"node_modules/redux-actions/es/createAction.js","./constants":"node_modules/redux-actions/es/constants.js"}],"node_modules/just-curry-it/index.js":[function(require,module,exports) {
+module.exports = curry;
+
+/*
+  function add(a, b, c) {
+    return a + b + c;
+  }
+  curry(add)(1)(2)(3); // 6
+  curry(add)(1)(2)(2); // 5
+  curry(add)(2)(4, 3); // 9
+
+  function add(...args) {
+    return args.reduce((sum, n) => sum + n, 0)
+  }
+  var curryAdd4 = curry(add, 4)
+  curryAdd4(1)(2, 3)(4); // 10
+
+  function converter(ratio, input) {
+    return (input*ratio).toFixed(1);
+  }
+  const curriedConverter = curry(converter)
+  const milesToKm = curriedConverter(1.62);
+  milesToKm(35); // 56.7
+  milesToKm(10); // 16.2
+*/
+
+function curry(fn, arity) {
+  return function curried() {
+    if (arity == null) {
+      arity = fn.length;
+    }
+    var args = [].slice.call(arguments);
+    if (args.length >= arity) {
+      return fn.apply(this, args);
+    } else {
+      return function() {
+        return curried.apply(this, args.concat([].slice.call(arguments)));
+      };
+    }
+  };
+}
+
+},{}],"node_modules/redux-actions/es/createCurriedAction.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _justCurryIt = _interopRequireDefault(require("just-curry-it"));
+
+var _createAction = _interopRequireDefault(require("./createAction"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = function _default(type, payloadCreator) {
+  return (0, _justCurryIt.default)((0, _createAction.default)(type, payloadCreator), payloadCreator.length);
+};
+
+exports.default = _default;
+},{"just-curry-it":"node_modules/just-curry-it/index.js","./createAction":"node_modules/redux-actions/es/createAction.js"}],"node_modules/redux-actions/es/utils/isUndefined.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default(value) {
+  return value === undefined;
+};
+
+exports.default = _default;
+},{}],"node_modules/redux-actions/es/handleAction.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = handleAction;
+
+var _invariant = _interopRequireDefault(require("invariant"));
+
+var _isFunction = _interopRequireDefault(require("./utils/isFunction"));
+
+var _isPlainObject = _interopRequireDefault(require("./utils/isPlainObject"));
+
+var _identity = _interopRequireDefault(require("./utils/identity"));
+
+var _isNil = _interopRequireDefault(require("./utils/isNil"));
+
+var _isUndefined = _interopRequireDefault(require("./utils/isUndefined"));
+
+var _toString = _interopRequireDefault(require("./utils/toString"));
+
+var _constants = require("./constants");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function handleAction(type, reducer, defaultState) {
+  if (reducer === void 0) {
+    reducer = _identity.default;
+  }
+
+  var types = (0, _toString.default)(type).split(_constants.ACTION_TYPE_DELIMITER);
+  (0, _invariant.default)(!(0, _isUndefined.default)(defaultState), "defaultState for reducer handling " + types.join(', ') + " should be defined");
+  (0, _invariant.default)((0, _isFunction.default)(reducer) || (0, _isPlainObject.default)(reducer), 'Expected reducer to be a function or object with next and throw reducers');
+
+  var _ref = (0, _isFunction.default)(reducer) ? [reducer, reducer] : [reducer.next, reducer.throw].map(function (aReducer) {
+    return (0, _isNil.default)(aReducer) ? _identity.default : aReducer;
+  }),
+      nextReducer = _ref[0],
+      throwReducer = _ref[1];
+
+  return function (state, action) {
+    if (state === void 0) {
+      state = defaultState;
+    }
+
+    var actionType = action.type;
+
+    if (!actionType || types.indexOf((0, _toString.default)(actionType)) === -1) {
+      return state;
+    }
+
+    return (action.error === true ? throwReducer : nextReducer)(state, action);
+  };
+}
+},{"invariant":"node_modules/invariant/browser.js","./utils/isFunction":"node_modules/redux-actions/es/utils/isFunction.js","./utils/isPlainObject":"node_modules/redux-actions/es/utils/isPlainObject.js","./utils/identity":"node_modules/redux-actions/es/utils/identity.js","./utils/isNil":"node_modules/redux-actions/es/utils/isNil.js","./utils/isUndefined":"node_modules/redux-actions/es/utils/isUndefined.js","./utils/toString":"node_modules/redux-actions/es/utils/toString.js","./constants":"node_modules/redux-actions/es/constants.js"}],"node_modules/reduce-reducers/es/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default() {
+  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+    args[_key] = arguments[_key];
+  }
+
+  var initialState = typeof args[args.length - 1] !== 'function' && args.pop();
+  var reducers = args;
+
+  if (typeof initialState === 'undefined') {
+    throw new TypeError('The initial state may not be undefined. If you do not want to set a value for this reducer, you can use null instead of undefined.');
+  }
+
+  return function (prevState, value) {
+    for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+      args[_key2 - 2] = arguments[_key2];
+    }
+
+    var prevStateIsUndefined = typeof prevState === 'undefined';
+    var valueIsUndefined = typeof value === 'undefined';
+
+    if (prevStateIsUndefined && valueIsUndefined && initialState) {
+      return initialState;
+    }
+
+    return reducers.reduce(function (newState, reducer) {
+      return reducer.apply(undefined, [newState, value].concat(args));
+    }, prevStateIsUndefined && !valueIsUndefined && initialState ? initialState : prevState);
+  };
+};
+
+exports.default = _default;
+},{}],"node_modules/redux-actions/es/utils/hasGeneratorInterface.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = hasGeneratorInterface;
+
+var _ownKeys = _interopRequireDefault(require("./ownKeys"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function hasGeneratorInterface(handler) {
+  var keys = (0, _ownKeys.default)(handler);
+  var hasOnlyInterfaceNames = keys.every(function (ownKey) {
+    return ownKey === 'next' || ownKey === 'throw';
+  });
+  return keys.length && keys.length <= 2 && hasOnlyInterfaceNames;
+}
+},{"./ownKeys":"node_modules/redux-actions/es/utils/ownKeys.js"}],"node_modules/redux-actions/es/utils/flattenReducerMap.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _isPlainObject = _interopRequireDefault(require("./isPlainObject"));
+
+var _isMap = _interopRequireDefault(require("./isMap"));
+
+var _hasGeneratorInterface = _interopRequireDefault(require("./hasGeneratorInterface"));
+
+var _flattenWhenNode = _interopRequireDefault(require("./flattenWhenNode"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = (0, _flattenWhenNode.default)(function (node) {
+  return ((0, _isPlainObject.default)(node) || (0, _isMap.default)(node)) && !(0, _hasGeneratorInterface.default)(node);
+});
+
+exports.default = _default;
+},{"./isPlainObject":"node_modules/redux-actions/es/utils/isPlainObject.js","./isMap":"node_modules/redux-actions/es/utils/isMap.js","./hasGeneratorInterface":"node_modules/redux-actions/es/utils/hasGeneratorInterface.js","./flattenWhenNode":"node_modules/redux-actions/es/utils/flattenWhenNode.js"}],"node_modules/redux-actions/es/handleActions.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = handleActions;
+
+var _reduceReducers = _interopRequireDefault(require("reduce-reducers"));
+
+var _invariant = _interopRequireDefault(require("invariant"));
+
+var _isPlainObject = _interopRequireDefault(require("./utils/isPlainObject"));
+
+var _isMap = _interopRequireDefault(require("./utils/isMap"));
+
+var _ownKeys = _interopRequireDefault(require("./utils/ownKeys"));
+
+var _flattenReducerMap = _interopRequireDefault(require("./utils/flattenReducerMap"));
+
+var _handleAction = _interopRequireDefault(require("./handleAction"));
+
+var _get = _interopRequireDefault(require("./utils/get"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function handleActions(handlers, defaultState, options) {
+  if (options === void 0) {
+    options = {};
+  }
+
+  (0, _invariant.default)((0, _isPlainObject.default)(handlers) || (0, _isMap.default)(handlers), 'Expected handlers to be a plain object.');
+  var flattenedReducerMap = (0, _flattenReducerMap.default)(handlers, options);
+  var reducers = (0, _ownKeys.default)(flattenedReducerMap).map(function (type) {
+    return (0, _handleAction.default)(type, (0, _get.default)(type, flattenedReducerMap), defaultState);
+  });
+
+  var reducer = _reduceReducers.default.apply(void 0, reducers.concat([defaultState]));
+
+  return function (state, action) {
+    if (state === void 0) {
+      state = defaultState;
+    }
+
+    return reducer(state, action);
+  };
+}
+},{"reduce-reducers":"node_modules/reduce-reducers/es/index.js","invariant":"node_modules/invariant/browser.js","./utils/isPlainObject":"node_modules/redux-actions/es/utils/isPlainObject.js","./utils/isMap":"node_modules/redux-actions/es/utils/isMap.js","./utils/ownKeys":"node_modules/redux-actions/es/utils/ownKeys.js","./utils/flattenReducerMap":"node_modules/redux-actions/es/utils/flattenReducerMap.js","./handleAction":"node_modules/redux-actions/es/handleAction.js","./utils/get":"node_modules/redux-actions/es/utils/get.js"}],"node_modules/redux-actions/es/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "combineActions", {
+  enumerable: true,
+  get: function () {
+    return _combineActions.default;
+  }
+});
+Object.defineProperty(exports, "createAction", {
+  enumerable: true,
+  get: function () {
+    return _createAction.default;
+  }
+});
+Object.defineProperty(exports, "createActions", {
+  enumerable: true,
+  get: function () {
+    return _createActions.default;
+  }
+});
+Object.defineProperty(exports, "createCurriedAction", {
+  enumerable: true,
+  get: function () {
+    return _createCurriedAction.default;
+  }
+});
+Object.defineProperty(exports, "handleAction", {
+  enumerable: true,
+  get: function () {
+    return _handleAction.default;
+  }
+});
+Object.defineProperty(exports, "handleActions", {
+  enumerable: true,
+  get: function () {
+    return _handleActions.default;
+  }
+});
+
+var _combineActions = _interopRequireDefault(require("./combineActions"));
+
+var _createAction = _interopRequireDefault(require("./createAction"));
+
+var _createActions = _interopRequireDefault(require("./createActions"));
+
+var _createCurriedAction = _interopRequireDefault(require("./createCurriedAction"));
+
+var _handleAction = _interopRequireDefault(require("./handleAction"));
+
+var _handleActions = _interopRequireDefault(require("./handleActions"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./combineActions":"node_modules/redux-actions/es/combineActions.js","./createAction":"node_modules/redux-actions/es/createAction.js","./createActions":"node_modules/redux-actions/es/createActions.js","./createCurriedAction":"node_modules/redux-actions/es/createCurriedAction.js","./handleAction":"node_modules/redux-actions/es/handleAction.js","./handleActions":"node_modules/redux-actions/es/handleActions.js"}],"src/redux/dateReducer.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.dateDrawAP = exports.dateDrawDay = exports.dateDrawTime = exports.dateDrawYear = void 0;
+
+var _reduxActions = require("redux-actions");
+
+var _Date = require("../modules/Date");
+
+var _handleActions;
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+// Redux Action 정의
+var DRAWYEAR = 'date/DRAWYEAR';
+var DRAWDAY = 'date/DRAWDAY';
+var DRAWTIME = 'date/DRAWTIME';
+var DRAWAP = 'date/DRAWAP'; // Action Craetor 함수 정의
+
+var dateDrawYear = (0, _reduxActions.createAction)(DRAWYEAR);
+exports.dateDrawYear = dateDrawYear;
+var dateDrawTime = (0, _reduxActions.createAction)(DRAWTIME);
+exports.dateDrawTime = dateDrawTime;
+var dateDrawDay = (0, _reduxActions.createAction)(DRAWDAY);
+exports.dateDrawDay = dateDrawDay;
+var dateDrawAP = (0, _reduxActions.createAction)(DRAWAP);
+exports.dateDrawAP = dateDrawAP;
+var state = {
+  year: null,
+  day: null,
+  ap: null,
+  // AM인지 PM인지
+  time: null
+};
+var dateReducer = (0, _reduxActions.handleActions)((_handleActions = {}, _defineProperty(_handleActions, DRAWYEAR, function (state) {
+  return _objectSpread(_objectSpread({}, state), {}, {
+    year: (0, _Date.getYear)()
+  });
+}), _defineProperty(_handleActions, DRAWDAY, function (state) {
+  return _objectSpread(_objectSpread({}, state), {}, {
+    day: (0, _Date.getDay)()
+  });
+}), _defineProperty(_handleActions, DRAWAP, function (state) {
+  return _objectSpread(_objectSpread({}, state), {}, {
+    ap: (0, _Date.getAp)()
+  });
+}), _defineProperty(_handleActions, DRAWTIME, function (state) {
+  return _objectSpread(_objectSpread({}, state), {}, {
+    time: (0, _Date.getTime)()
+  });
+}), _handleActions), state);
+var _default = dateReducer;
+exports.default = _default;
+},{"redux-actions":"node_modules/redux-actions/es/index.js","../modules/Date":"src/modules/Date.js"}],"src/redux/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _redux = require("redux");
+
+var _dateReducer = _interopRequireDefault(require("./dateReducer"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var rootReducer = (0, _redux.combineReducers)({
+  dateReducer: _dateReducer.default
+});
+var _default = rootReducer;
+exports.default = _default;
+},{"redux":"node_modules/redux/es/redux.js","./dateReducer":"src/redux/dateReducer.js"}],"node_modules/redux-devtools-extension/index.js":[function(require,module,exports) {
+"use strict";
+
+var compose = require('redux').compose;
+
+exports.__esModule = true;
+exports.composeWithDevTools = (
+  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ :
+    function() {
+      if (arguments.length === 0) return undefined;
+      if (typeof arguments[0] === 'object') return compose;
+      return compose.apply(null, arguments);
+    }
+);
+
+exports.devToolsEnhancer = (
+  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__ ?
+    window.__REDUX_DEVTOOLS_EXTENSION__ :
+    function() { return function(noop) { return noop; } }
+);
+
+},{"redux":"node_modules/redux/es/redux.js"}],"src/index.js":[function(require,module,exports) {
 "use strict";
 
 require("./modules/Date.js");
 
 require("./scss/index.scss");
 
+var _redux = require("redux");
+
+var _index2 = _interopRequireDefault(require("./redux/index.js"));
+
+var _reduxDevtoolsExtension = require("redux-devtools-extension");
+
+var _DOM = require("./modules/DOM.js");
+
+var _dateReducer = require("./redux/dateReducer");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 console.log('Hello World!');
-},{"./modules/Date.js":"src/modules/Date.js","./scss/index.scss":"src/scss/index.scss"}],"node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+var store = (0, _redux.createStore)(_index2.default, (0, _reduxDevtoolsExtension.composeWithDevTools)());
+
+var render = function render() {
+  var state = store.getState();
+  var date = state.dateReducer;
+  console.log(date);
+  if (date.year !== null) _DOM.P_YEAR.innerHTML = date.year;
+  if (date.year !== null) _DOM.P_DAY.innerHTML = date.day;
+  if (date.ap !== null) _DOM.P_AP.innerHTML = date.ap;
+  if (date.time !== null) _DOM.SPAN_TIME.innerHTML = date.time;
+};
+
+store.subscribe(render);
+
+window.onload = function () {
+  store.dispatch((0, _dateReducer.dateDrawYear)());
+  store.dispatch((0, _dateReducer.dateDrawDay)());
+  store.dispatch((0, _dateReducer.dateDrawAP)());
+  setInterval(function () {
+    return store.dispatch((0, _dateReducer.dateDrawTime)());
+  }, 1000);
+};
+},{"./modules/Date.js":"src/modules/Date.js","./scss/index.scss":"src/scss/index.scss","redux":"node_modules/redux/es/redux.js","./redux/index.js":"src/redux/index.js","redux-devtools-extension":"node_modules/redux-devtools-extension/index.js","./modules/DOM.js":"src/modules/DOM.js","./redux/dateReducer":"src/redux/dateReducer.js"}],"node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

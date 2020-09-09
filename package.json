@@ -6,11 +6,15 @@
   "author": "galaxy4276 <galaxyhi4276@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "parcel": "^1.12.4"
+    "parcel": "^1.12.4",
+    "redux-devtools-extension": "^2.13.8"
   },
   "dependencies": {
     "moment": "^2.27.0",
-    "node-sass": "^4.14.1"
+    "node-sass": "^4.14.1",
+    "redux": "^4.0.5",
+    "redux-action": "^1.2.2",
+    "redux-actions": "^2.6.5"
   },
   "scripts": {
     "start": "parcel index.html"

@@ -1,12 +1,18 @@
 @import './reset';
 @import './Date.scss';
 
+
+// rem 기준이 되는 html: font-size 기반으로 계산을 수행하기위해 10px 설정
 html {
   font-size: 10px;
 }
 
+// 컨텐츠가 표현될 박스(container)의 크기를 설정
 .content-wrapper {
-  width: 50rem;
-  height: 50rem;
+  width: 100rem;
+  height: 100rem;
   margin: auto;
+
+  display: flex;
+  justify-content: center;
 }

@@ -19,7 +19,7 @@ const state = {
   year: null,
   day: null,
   ap: null, // AM인지 PM인지
-  time: null,
+  time: '0:00:00',
 };
 
 

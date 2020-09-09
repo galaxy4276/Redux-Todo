@@ -7838,7 +7838,7 @@ var state = {
   day: null,
   ap: null,
   // AM인지 PM인지
-  time: null
+  time: '0:00:00'
 };
 var dateReducer = (0, _reduxActions.handleActions)((_handleActions = {}, _defineProperty(_handleActions, DRAWYEAR, function (state) {
   return _objectSpread(_objectSpread({}, state), {}, {

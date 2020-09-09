@@ -1,3 +1,25 @@
 .date-container {
-  
+  width: 80%;
+
+  .date-top {
+    font-family: 'Noto Sans KR';
+    display: flex;
+    justify-content: center;
+    font-size: 25px;
+    font-weight: 700;
+    .date-day {
+      margin-left: 10px;
+    }
+  }
+
+  .date-main {
+    display: flex;
+    justify-content: center;
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 35px;
+    .date-time {
+      margin-left: 10px;
+    }
+  }
 }

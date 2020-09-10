@@ -1,0 +1,30 @@
+.user-container {
+  margin-top: 10rem;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Noto Sans KR';
+
+  input {
+    border: none;
+    outline: none;
+    border: 1px solid grey;
+    border-radius: 35px;
+    padding: 10px 30px;
+    text-align: center;
+  }
+}
+
+.user-btn {
+  margin-top: 10px;
+  border: none;
+  outline: none;
+  padding: 5px 25px;
+  border-radius: 35px;
+}
+
+.username {
+  font-family: 'Noto Sans KR';
+  font-size: 2.3rem;
+}
